@@ -1,0 +1,43 @@
+﻿@using AccountManager.WebApp.Models
+@model IEnumerable< MemberViewModel>
+
+@{
+    ViewBag.Title = "All Members";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Register New", "Register")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            
+            <td>
+                @Html.ActionLink("Assign Roles", "AssignRoles", new { userName = item.UserName })
+            </td>
+        </tr>
+    }
+
+</table>
+

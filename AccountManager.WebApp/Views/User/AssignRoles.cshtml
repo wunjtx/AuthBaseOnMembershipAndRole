@@ -1,0 +1,57 @@
+﻿@model SelectList
+@section styles{
+    <link href="http://cdn.bootcss.com/iCheck/1.0.2/skins/all.css" rel="stylesheet">
+}
+@{
+    ViewBag.Title = "Assign Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Authorize</h2>
+
+@using (Html.BeginForm("AssignRoles", "User",new { userName= ViewBag.User.UserName } ,FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr><th>Category</th><th>Setting</th><th>Select All</th></tr>
+        @foreach (var group in Model.Items.OfType<SelectListItem>().GroupBy(sli => sli.Group))
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelitem => group.Key.Name)</td>
+                <td>
+                    @foreach (var item in group)
+                    {
+                        <input type="checkbox" name="roles" value="@item.Value" @(item.Selected ? Html.Raw("checked") : null) />
+                        <span style="margin-right:1em">@item.Text</span>
+                    }
+                </td>
+                <td>
+                    <input type="checkbox" name="check-all" value="" class="check-all" />
+                </td>
+            </tr>
+        }
+    </table>
+
+    <button class="btn btn-default" type="submit">Save</button>
+}
+
+
+@section scripts{
+    <script src="//cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+    <script>
+        $(function () {
+            $("input").iCheck({
+                checkboxClass: 'icheckbox_minimal',
+                increaseArea: '20%'
+            })
+
+            $('input.check-all').on('ifChecked', function () {
+                $(this).parents("tr").find("input:checkbox").iCheck('check');
+            });
+
+            $('input.check-all').on('ifUnchecked', function () {
+                $(this).parents("tr").find("input:checkbox").iCheck('uncheck');
+            });
+        });
+    </script>
+}
